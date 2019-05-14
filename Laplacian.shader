@@ -91,7 +91,7 @@ Shader "Unlit/Laplacian"
 				//〇〇〇
 				//------
 				//------
-                float2 a_uv = float2(-pix,-pix);　
+                float2 a_uv = float2(-pix,-pix);
                 float2 b_uv = float2(0,-pix);
                 float2 c_uv = float2(+pix,-pix);
 
@@ -158,4 +158,5 @@ Shader "Unlit/Laplacian"
 		}
 	}
 }
+ 
  
