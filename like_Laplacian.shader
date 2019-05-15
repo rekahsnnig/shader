@@ -1,4 +1,4 @@
-Shader "Unlit/Laplacian"
+Shader "Unlit/like_Laplacian"
 {
 	Properties
 	{
