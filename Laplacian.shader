@@ -130,7 +130,7 @@ Shader "Unlit/Laplacian"
                 float3x3 blue =  float3x3(a.b, b.b, c.b, d.b , e.b, f.b, g.b, h.b, i.b);
                 //全要素にstep(点,辺の長さ)をかけて全部加算
 				//ある点がある四角から遠いのであればstep()は0を返す
-				//step() * 色を足したとしても0　結果的にその点が所属している四角形の中心の点の色だけ残る
+				//step() * COLOR stepが0のときにこれを足したとしても値は増えない　結果的にその点が所属している四角形の中心の点の色だけ残る
                 float3x3 red_mul = mul(Laplas,red);
                 float3x3 green_mul = mul(Laplas,green);
                 float3x3 blue_mul = mul(Laplas,blue);
