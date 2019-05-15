@@ -58,7 +58,7 @@ Shader "Unlit/Laplacian"
 					  col._m22 * dis._m22;
             }
             
-            float sum_sum3x3(float3x3 col,float3x3 dis){ //入力された行列の全要素をかけて足す
+            float sum_sum3x3(float3x3 col){ //入力された行列の全要素をかけて足す
                return col._m00 * dis._m00 + 
 					  col._m01 + 
 					  col._m02 + 
@@ -87,7 +87,7 @@ Shader "Unlit/Laplacian"
 				//座標を_Fineの値に応じて粗くする->ドット調になる
                 float2 grab_uv = float2(floor(in_uv * _Fine)/_Fine);
                 in_uv -= grab_uv;	   //位置合わせ
-                float pix = 1/_Fine/3; //どれだけの幅を1pixelとみなすか
+                float pix = 1/_Fine; //どれだけの幅を1pixelとみなすか
                 float pi = 3.141592;
                 
                 float Point = step( float(abs( sin((grab_uv.x ) * (_Fine * (pi))) ) 
@@ -153,9 +153,9 @@ Shader "Unlit/Laplacian"
                                           Sq_distanse(in_uv,grab_uv,g_uv),Sq_distanse(in_uv,grab_uv,h_uv),Sq_distanse(in_uv,grab_uv,i_uv)
                                           );
 				//色要素ごとにラプラシアンフィルタをかけていく
-                 col.r = sum_sum3x3(red_mul,dist);
-                 col.g = sum_sum3x3(green_mul,dist);
-                 col.b = sum_sum3x3(blue_mul,dist);
+                 col.r = sum_sum3x3(red_mul);
+                 col.g = sum_sum3x3(green_mul);
+                 col.b = sum_sum3x3(blue_mul);
 				 //アルファ値はなんとなく平均をとってみた
                  col.a = ((col.r + col.g + col.b) /3);
                 
