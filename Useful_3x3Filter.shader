@@ -129,14 +129,13 @@ Shader "Unlit/Useful_3x3_filter"
                 float3x3 red =   float3x3(a.r, b.r, c.r, d.r , e.r, f.r, g.r, h.r, i.r);
                 float3x3 green = float3x3(a.g, b.g, c.g, d.g , e.g, f.g, g.g, h.g, i.g);
                 float3x3 blue =  float3x3(a.b, b.b, c.b, d.b , e.b, f.b, g.b, h.b, i.b);
-                //全要素にstep(点,辺の長さ)をかけて全部加算
-                //ある点がある四角から遠いのであればstep()は0を返す
-                //step() * COLOR stepが0のときにこれを足したとしても値は増えない　結果的にその点が所属している四角形の中心の点の色だけ残る
+                
+                //色要素ごとにフィルタをかけていく
                 float3x3 red_mul = mul(Filter3x3,red);
                 float3x3 green_mul = mul(Filter3x3,green);
                 float3x3 blue_mul = mul(Filter3x3,blue);
                 
-                //色要素ごとにフィルタをかけていく
+                
                  col.r = sum_sum3x3(red_mul);
                  col.g = sum_sum3x3(green_mul);
                  col.b = sum_sum3x3(blue_mul);
