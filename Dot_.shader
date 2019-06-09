@@ -209,6 +209,7 @@ Shader "Unlit/Dotted3"
                 return f;
             }
             
+            //************************************************************************************************************
             float PtoLdis(float propX,float propY,float2 XY){
                return abs(propX * XY.x + propY * XY.y)/sqrt(pow(propX,2) + pow(propY,2));
             }
@@ -217,7 +218,6 @@ Shader "Unlit/Dotted3"
                 return (Round-0)/(1-0)*(InColor-0)+0;
             }
 
-            //************************************************************************************************************
 
             v2f vert (appdata v)
             {
