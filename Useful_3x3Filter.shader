@@ -4,9 +4,9 @@ Shader "Unlit/Useful_3x3_filter"
     {
          _Fine("Fine",float) = 500
          _Coefficient("Coefficient",float) = 1
-         _One("One",vector)=(0,-1,0)
-         _Two("Two",vector)=(-1,4,-1)
-         _Three("Three",vector)=(0,-1,0)
+         _One("One",vector)=(0,1,0)
+         _Two("Two",vector)=(1,-4,1)
+         _Three("Three",vector)=(0,1,0)
          [Space(2)]
          _times("times",float) = 1
          
