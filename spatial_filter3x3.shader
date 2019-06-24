@@ -1,4 +1,4 @@
-Shader "Unlit/Useful_3x3_filter"
+Shader "Unlit/special_filter3x3"
 {
     Properties
     {
@@ -77,13 +77,10 @@ Shader "Unlit/Useful_3x3_filter"
                 
                 float2 in_uv = float2(IN.uv.x / IN.uv.w, IN.uv.y / IN.uv.w);
                 //座標を_Fineの値に応じて粗くする->ドット調になる
+                //lut
                 float2 grab_uv = float2(floor(in_uv * _Fine)/_Fine);
-                in_uv -= grab_uv;      //位置合わせ
                 float pix = 1/_Fine; //どれだけの幅を1pixelとみなすか
                 float pi = 3.141592;
-                
-                float Point = step( float(abs( sin((grab_uv.x ) * (_Fine * (pi))) ) 
-                                   * abs( sin((grab_uv.y ) * (_Fine * (pi)))) ),sqrt(0));//0.25にすると一つの円の半径を0.5まで認めることになる
                 
                 //係数をかけつつFilterの要素を合わせて3x3のフィルタを作る
                 float3x3 Filter3x3 = _Coefficient * float3x3(_One,_Two,_Three);
@@ -139,7 +136,6 @@ Shader "Unlit/Useful_3x3_filter"
                  col.r = sum_sum3x3(red_mul);
                  col.g = sum_sum3x3(green_mul);
                  col.b = sum_sum3x3(blue_mul);
-                 //アルファ値はなんとなく平均をとってみた
                  col.a = ((col.r + col.g + col.b) /3);
                 
                 col += float4(col.xyz * 10,0) * _times;
