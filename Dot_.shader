@@ -102,10 +102,10 @@ Shader "Unlit/Dotted3"
                 //return clamp(outCol/255,0,1);
                 //
                 col *= 255;
-                outCol.r = floor((col.r)/floor(_RedStep))*floor(_RedStep);
-                outCol.g = floor((col.g)/floor(_GreenStep))*floor(_GreenStep);
-                outCol.b = floor((col.b)/floor(_BlueStep))*floor(_BlueStep);
-                return clamp(outCol/255,0,1);;
+               outCol.r = floor(((col.r - 0) / 255 - 0) * (_RedStep - 0));
+			outCol.g = floor(((col.g - 0) / 255 - 0) * (_GreenStep - 0));
+			outCol.b = floor(((col.b - 0) / 255 - 0) * (_BlueStep - 0));
+		return outCol;
             }
 
             v2f vert (appdata v)
