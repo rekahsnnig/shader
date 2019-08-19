@@ -1,8 +1,7 @@
-Shader "Unlit/Geom_confuse01_"
+Shader "Unlit/momizi"
 {
 	Properties
 	{
-		_MainTex("Texture", 2D) = "white" {}
 		[Toggle]_X("UseX for rotation",float) = 0
 		_Xspeed("X speed",float) = 0
 		[Toggle]_Y("UseY for rotation",float) = 0
@@ -53,8 +52,6 @@ Shader "Unlit/Geom_confuse01_"
 					float color : COLOR;
 				};
 
-				sampler2D _MainTex;
-				float4 _MainTex_ST;
 				float _Speed;
 				float _xRange;
 				float _yRange;
@@ -108,6 +105,43 @@ Shader "Unlit/Geom_confuse01_"
 						return rotate;
 					}
 					
+
+
+					fixed2 random2(fixed2 st) {
+						st = fixed2(dot(st, fixed2(127.1, 311.7)),
+							dot(st, fixed2(269.5, 183.3)));
+						return -1.0 + 2.0*frac(sin(st)*43758.5453123);
+					}
+
+
+					float perlinNoise(fixed2 st)
+					{
+						fixed2 p = floor(st);
+						fixed2 f = frac(st);
+						fixed2 u = f * f*(3.0 - 2.0*f);
+
+						float v00 = random2(p + fixed2(0, 0));
+						float v10 = random2(p + fixed2(1, 0));
+						float v01 = random2(p + fixed2(0, 1));
+						float v11 = random2(p + fixed2(1, 1));
+
+						return lerp(lerp(dot(v00, f - fixed2(0, 0)), dot(v10, f - fixed2(1, 0)), u.x),
+							lerp(dot(v01, f - fixed2(0, 1)), dot(v11, f - fixed2(1, 1)), u.x),
+							u.y) + 0.5f;
+					}
+
+					float fBm(fixed2 st, float octaves)
+					{
+						float f = 0;
+						fixed2 q = st;
+						[unroll]
+						for (int i = 1;i < octaves;i++) {
+							f += perlinNoise(q) / pow(2, i);
+							q = q * (2.00 + i / 100);
+						}
+
+						return f;
+					}
 
 					float equal(float a, float b)
 					{
@@ -173,18 +207,11 @@ Shader "Unlit/Geom_confuse01_"
 						return col;
 					}
 
-					fixed2 random2(fixed2 st) {
-						st = fixed2(dot(st, fixed2(127.1, 311.7)),
-							dot(st, fixed2(269.5, 183.3)));
-						return -1.0 + 2.0*frac(sin(st)*43758.5453123);
-					}
-
-
 					v2g vert(appdata v)
 					{
 						v2g o;
 						o.vertex = v.vertex;
-						o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+						o.uv = v.uv;
 						o.normal = v.normal;
 						return o;
 					}
@@ -203,7 +230,7 @@ Shader "Unlit/Geom_confuse01_"
 									v.vertex = UnityObjectToClipPos(float4(mul(Move(i),input[j].vertex).xyz,1.0));
 									v.uv = input[j].uv;
 									v.normal = input[j].normal;
-									v.color = i;
+									v.color = random2(float2(i,i));
 									OutputStream.Append(v);
 								}
 								OutputStream.RestartStrip();
@@ -215,11 +242,12 @@ Shader "Unlit/Geom_confuse01_"
 							float2 uv = (infrag.uv - float2(0.5,0.5) ) * 2;
 							
 							fixed4 col = momizi(uv);
-							col.g = normalize(random2(float2(infrag.color, infrag.color)));
-							float alpha = step(1,col.r);
-							col.a = alpha;
-							if (alpha < 1) { discard; }
-							return col;
+
+							if (col.r < 1) { discard; }
+							col.g = infrag.color;
+							col.r = 1.5;
+							float noise = 1 - (fBm(uv*300,5));
+							return col * noise + 0.1;
 						}
 						ENDCG
 					}
