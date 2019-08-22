@@ -156,8 +156,6 @@ Shader "shader/point"
 
 				uv = float2(floor(uv.x*Fine) / (Fine),
 									floor(uv.y*Fine) / (Fine));
-				float2 uv_tex = float2(floor(uv.x*Fine) / (Fine),
-										floor(uv.y*Fine) / (Fine));
 				fixed4 textureColor = tex2D(_grabTex, uv);
 				return textureColor;
 			}
