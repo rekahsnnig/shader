@@ -152,7 +152,7 @@ Shader "shader/point"
 				float2 uv = float2(i.uv.x / i.uv.w, i.uv.y / i.uv.w);
 				//vertexW = float3(0, 0, 0);
 				float3 cameraPos = mul(float4(_WorldSpaceCameraPos,1), UNITY_MATRIX_MV);
-				float distance = length(cameraPos);
+				float distance = length(_WorldSpaceCameraPos);
 				Fine *= distance;
 
 				uv = float2(floor(uv.x*Fine) / (Fine),
