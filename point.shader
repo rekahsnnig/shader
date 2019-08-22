@@ -112,7 +112,7 @@ Shader "shader/point"
 			GrabPass{ "_grabTex" }
 		Pass
 		{
-			Tags { "LightMode" = "ForwardBase"}
+			Tags { "LightMode" = "ForwardBase" }
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -151,12 +151,14 @@ Shader "shader/point"
 				float Fine = _Fineness;
 				float2 uv = float2(i.uv.x / i.uv.w, i.uv.y / i.uv.w);
 				//vertexW = float3(0, 0, 0);
-				float3 cameraPos = mul(float4(_WorldSpaceCameraPos,1), UNITY_MATRIX_MV);
-				float distance = length(_WorldSpaceCameraPos);
+				float3 cameraPos = mul(float4(_WorldSpaceCameraPos,1), unity_WorldToObject);
+				float distance = length(cameraPos);
 				Fine *= distance;
 
 				uv = float2(floor(uv.x*Fine) / (Fine),
 									floor(uv.y*Fine) / (Fine));
+				float2 uv_tex = float2(floor(uv.x*Fine) / (Fine),
+										floor(uv.y*Fine) / (Fine));
 				fixed4 textureColor = tex2D(_grabTex, uv);
 				return textureColor;
 			}
