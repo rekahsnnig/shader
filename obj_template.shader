@@ -1,3 +1,5 @@
+//http://tips.hecomi.com/entry/2016/09/26/014539
+//参考にさせてもらいました
 Shader "raymarching/obj_template"
 {
 	Properties
@@ -33,9 +35,7 @@ Shader "raymarching/obj_template"
 				float s = length(p) - 0.5;
 				return s;
 			}
-			//http://tips.hecomi.com/entry/2016/09/26/014539
-			//参考にさせてもらいました
-			//---------------------------------
+			
 			float3 toLocal(float3 p)
 			{
 				return mul(unity_WorldToObject, float4(p, 1.)).xyz;
@@ -55,7 +55,6 @@ Shader "raymarching/obj_template"
 					objDist(p + d.zyx) - objDist(p - d.zyx)
 					));
 			}
-			//-------------------------------------
 			v2f vert(appdata v)
 			{
 				v2f o;
