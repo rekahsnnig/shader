@@ -9,6 +9,7 @@ Shader "raymarching/obj_template"
 	{
 		Tags {"RenderType" = "Queque"}
 		LOD 100
+		Cull off
 		Pass
 		{
 			CGPROGRAM
@@ -17,25 +18,27 @@ Shader "raymarching/obj_template"
 
 			#include "UnityCG.cginc"
 			#define DELTA 0.001
-			#define MAX 100
 
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				float3 normal : NORMAL;
 			};
 
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
 				float4 screen : TEXCOORD0;
+				float4 vertexW : TEXCOORD1;
+				float3 normal : NORMAL;
 			};
 
 			float dist(float3 p)
 			{
-				float s = length(p) - 0.5;
+				float s = length(p) - 0.3;
 				return s;
 			}
-			
+
 			float3 toLocal(float3 p)
 			{
 				return mul(unity_WorldToObject, float4(p, 1.)).xyz;
@@ -55,21 +58,38 @@ Shader "raymarching/obj_template"
 					objDist(p + d.zyx) - objDist(p - d.zyx)
 					));
 			}
+
 			v2f vert(appdata v)
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.screen = o.vertex;
+				o.vertexW = mul(unity_ObjectToWorld,v.vertex);
+				o.normal = v.normal;
 				return o;
 			}
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+			//UNITY_UV_STARTS_AT_TOP,_ScreemParamsは
+			//https://qiita.com/edo_m18/items/591925d7fc960d843afa
+				#if UNITY_UV_STARTS_AT_TOP
+							i.screen.y *= -1.0;
+				#endif
+				i.screen.x *= _ScreenParams.x / _ScreenParams.y;
 				float2 p = i.screen.xy / i.screen.w;
-				float3 cp = _WorldSpaceCameraPos;
+				float3 cp = i.vertexW;
 				float3 cd = -UNITY_MATRIX_V[2].xyz;
-				float3 cu = -UNITY_MATRIX_V[1].xyz;
+				float3 cu = UNITY_MATRIX_V[1].xyz;
 				float3 cs = UNITY_MATRIX_V[0].xyz;
+
+				//the Ray starting position when camera in object
+				//カメラ方向と法線の内積の正負によってレイの開始位置を変えられます
+				//外から見るだけならここは不要
+				float sep = dot(i.normal, cd);
+				cp =  step(0, sep) * _WorldSpaceCameraPos 
+				    + step(sep, 0) * i.vertexW;
+				//ここまで
 
 				float target = abs(UNITY_MATRIX_P[1][1]);
 
@@ -89,7 +109,6 @@ Shader "raymarching/obj_template"
 						break;
 					}
 					depth += d;
-					if (depth > MAX) { discard; }
 				}
 				return float4(color,1);
 			}
@@ -97,3 +116,4 @@ Shader "raymarching/obj_template"
 	}
 	}
 }
+
