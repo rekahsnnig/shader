@@ -6,12 +6,15 @@ Shader "Unlit/something_to_hirahira"
 		_Speeds("speed",vector) = (1,1,1,0)
 		_Axioses("axioses",vector) = (1,1,1,0)
 		_Size("Size",float) = 0.9
-		_Hight("Hight",float) = 15.0
+		_Hight("Hight",float) = 1
 		_Range("Range",float) = 10
 		_Shake("Shake",float) = 1
-		_Offset("Offset",float) = 10.5
+		_ShakeFrequency("ShakeFrequency",float) = 100
+		_RateOfFallingApart("Rate of falling apart",float) = 100
+		_Offset("Offset",float) = 0
 		_TessFactor("Tess Factor",Vector) = (2,2,2,2)
 		_FallenSpeed("FallenSpeed",float) = 1
+		[Toggle]_Inverse("Inverse", float) = 0
 	}
 		SubShader
 	{
@@ -29,6 +32,8 @@ Shader "Unlit/something_to_hirahira"
 			#pragma geometry geom
 
 			#pragma target 5.0
+
+
 
 			#define INPUT_PATCH_SIZE 3
 			#define OUTPUT_PATCH_SIZE 3
@@ -78,10 +83,12 @@ Shader "Unlit/something_to_hirahira"
 			float _Hight;
 			float _Range;
 			float _Shake;
+			float _ShakeFrequency;
+			float _RateOfFallingApart;
 			float _Offset;
+			float _Inverse;
 
 			sampler2D _MainTex;
-			float4 _MainTex_ST;
 
 				float4x4 Move(float3 speed)
 				{
@@ -123,7 +130,7 @@ Shader "Unlit/something_to_hirahira"
 				fixed2 random2(fixed2 st) {
 					st = fixed2(dot(st, fixed2(127.1, 311.7)),
 						dot(st, fixed2(269.5, 183.3)));
-					return -1.0 + 2.0*frac(sin(st)*43758.5453123);
+					return -1.0 + 2.0*frac(sin(st)*438.5453123);
 				}
 
 
@@ -213,6 +220,25 @@ Shader "Unlit/something_to_hirahira"
 					return float2(1,1);
 				}
 
+				float4 momizi(float2 in_uv)
+				{
+					float2 uv = rot(in_uv, 75);
+					uv = fold(uv);
+					float4 col = float4(uv,uv);
+					float2 shiftuv = float2(0.78,0.1);
+					float2 shifteduv = float2(shiftuv - uv);
+					col.r = step(length(shifteduv), 0.79);// *step(length(uv - float2(0.01, 0)), 0.1);
+					col.g = 0;
+					col.b = 0;
+					col.r = col.r - (step(0,Angle(in_uv))* step(Angle(in_uv),24));
+
+					col.r += col.r + step(length(in_uv), 0.2);
+					float red = step(abs(in_uv.y), 0.04) * step(0, in_uv.x) * step(length(shifteduv), 0.79);
+
+					col.r = max(col.r,red);
+					return col;
+				}
+
 				float3 getNormal(float4 one,float4 two ,float4 three)
 				{
 					float4 edge1 = one - two;
@@ -267,10 +293,11 @@ Shader "Unlit/something_to_hirahira"
 					return o;
 				}
 
+
 				[maxvertexcount(30)]
 				 void geom(triangle d2g inp[3], inout TriangleStream<g2f> OutputStream)
 				{
-					float size  = _Size;
+					float size = _Size;
 					float hight = _Hight;
 					float range = _Range;
 					float shake = _Shake;
@@ -282,44 +309,51 @@ Shader "Unlit/something_to_hirahira"
 
 					float3 Max_speeds = _Speeds.xyz;
 					float3 axioses = _Axioses.xyz;
-					
+
 					float4 normal = float4(1,1,1,1);
 						[unroll]
 						 for (int j = 0;j < 3;j++)
 						 {
-							float3 origin = float3(random2((inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz + inp[j].vertex.yx + inp[j].vertex.zy + inp[j].vertex.zx)),
-													random2(float2(inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz  )).x);
+							float3 origin = float3(random2((inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz + inp[j].vertex.yx + inp[j].vertex.zy + inp[j].vertex.zx)).x,
+													random2((inp[j].vertex.xy - inp[j].vertex.yz - inp[j].vertex.xz - inp[j].vertex.yx - inp[j].vertex.zy - inp[j].vertex.zx)).x,
+													random2(float2(inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz)).y);
 							float i = 6.6338284 * length(origin);
 							origin = origin.xzy;
-							origin.xz = mod(abs(origin.xz),range/2);
-							origin.y *= hight ;
+							origin.xz = (origin.xz) * 2 * range;
+							origin.y = (origin.y - 0.5) * 2 + hight;
 							float4 position = float4(0,0,0,0);
 							float3 add = float3(0,0,0);
 							float Oseed = origin.x + origin.z;
 							float2 randSeed = random2(origin.xy + origin.yz + origin.zx);
 							float origCoef = fBm(randSeed * exp(2.197141), 1) + 0.5;
-							float2 seed2 = origin.xz + origin.yz + origin.yx + i +j;
+							float2 seed2 = origin.xz + origin.yz + origin.yx + i + j;
 							float seed = length(origin) * (i + j);
-							float fallenSpeed = (_Time.y*fallen) + fBm(float2(seed,seed2.y),4)* 5;
+							float fallenSpeed = (_Time.y*fallen) + fBm(float2(seed,seed2.y),4) * 5;
 
-							add.y = (hight - mod((fallenSpeed ) , hight) ) - offset;
+							if (_Inverse > 0) {
+								add.y = (mod((fallenSpeed - offset), hight));
+							}
+							else {
+								add.y = (hight - mod((fallenSpeed - offset), hight));
+							}
 
-							add.xz += sin(sin(_Time.y * length(seed2))*(2*UNITY_PI)/7000) * shake;
+							add.xz += float2(sin(_Time.y / _ShakeFrequency + _RateOfFallingApart * random2(seed2).x) * shake
+										   , sin(_Time.y / _ShakeFrequency + _RateOfFallingApart * random2(seed2).y) * shake);
 							//add.xz = rot(add.xz,_Time.x);
 
 							//float coef = sign(step(normalize(length(origin)),0.5)-0.5);
 							// coef = -1;
-							
+
 							// origin.xz = rot(origin.xz,_Time.z);
 						   //float a = 100 * normalize(length(origin));
 						   //a = pow(fBm(origin.xz,4),2) * 7;
 						   //float b = 0.1 * pow(fBm(origin.xz,4),0) * coef;
 						   //float rotate_speed = add.y;
 							//origin.xz = logarithmic_Spiral(a,b,rotate_speed);
-							
+
 							float3 speedCoef = float3(1,1,1);
 							//speedCoef = add.y - origCoef + 2.197652181;
-							speedCoef = float3(length(random2(float2(i + j,length(origin.xz))) * add.y )
+							speedCoef = float3(length(random2(float2(i + j,length(origin.xz))) * add.y)
 												, length(random2(float2(i - j, length(origin.yz))) * add.y)
 													,length(random2(float2(i * j, length(origin.xy))) * add.y));
 							speedCoef = normalize(speedCoef*_Time.y);
@@ -329,7 +363,7 @@ Shader "Unlit/something_to_hirahira"
 							speed.y = speedCoef.y * Max_speeds.y;
 							speed.z = speedCoef.z * Max_speeds.z;
 
-							float axiosCoef = normalize((origin.x + origin.y + origin.y) /(0.001+origin.x-origin.y-origin.z) - cos(_Time.y * speedCoef));
+							float axiosCoef = normalize((origin.x + origin.y + origin.y) / (0.001 + origin.x - origin.y - origin.z) - cos(_Time.y * speedCoef));
 							float3 axios = float3(0,0,0);
 							axios.x = axiosCoef * axioses.x;
 							axios.y = axiosCoef * axioses.y;
