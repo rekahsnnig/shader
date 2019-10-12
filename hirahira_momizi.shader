@@ -6,12 +6,15 @@ Shader "Unlit/hirahira_momizi"
 		_Speeds("speed",vector) = (1,1,1,0)
 		_Axioses("axioses",vector) = (1,1,1,0)
 		_Size("Size",float) = 0.9
-		_Hight("Hight",float) = 15.0
+		_Hight("Hight",float) = 1
 		_Range("Range",float) = 10
 		_Shake("Shake",float) = 1
-		_Offset("Offset",float) = 10.5
+		_ShakeFrequency("ShakeFrequency",float) = 100
+		_RateOfFallingApart("Rate of falling apart",float) = 100
+		_Offset("Offset",float) = 0
 		_TessFactor("Tess Factor",Vector) = (2,2,2,2)
 		_FallenSpeed("FallenSpeed",float) = 1
+		[Toggle]_Inverse("Inverse", float) = 0
 	}
 		SubShader
 	{
@@ -29,6 +32,8 @@ Shader "Unlit/hirahira_momizi"
 			#pragma geometry geom
 
 			#pragma target 5.0
+
+			
 
 			#define INPUT_PATCH_SIZE 3
 			#define OUTPUT_PATCH_SIZE 3
@@ -78,8 +83,10 @@ Shader "Unlit/hirahira_momizi"
 			float _Hight;
 			float _Range;
 			float _Shake;
+			float _ShakeFrequency;
+			float _RateOfFallingApart;
 			float _Offset;
-				  
+			float _Inverse;
 
 				float4x4 Move(float3 speed)
 				{
@@ -121,7 +128,7 @@ Shader "Unlit/hirahira_momizi"
 				fixed2 random2(fixed2 st) {
 					st = fixed2(dot(st, fixed2(127.1, 311.7)),
 						dot(st, fixed2(269.5, 183.3)));
-					return -1.0 + 2.0*frac(sin(st)*43758.5453123);
+					return -1.0 + 2.0*frac(sin(st)*438.5453123);
 				}
 
 
@@ -284,6 +291,7 @@ Shader "Unlit/hirahira_momizi"
 					return o;
 				}
 
+
 				[maxvertexcount(30)]
 				 void geom(triangle d2g inp[3], inout TriangleStream<g2f> OutputStream)
 				{
@@ -304,12 +312,13 @@ Shader "Unlit/hirahira_momizi"
 						[unroll]
 						 for (int j = 0;j < 3;j++)
 						 {
-							float3 origin = float3(random2((inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz + inp[j].vertex.yx + inp[j].vertex.zy + inp[j].vertex.zx)),
-													random2(float2(inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz  )).x);
+							float3 origin = float3(random2((inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz + inp[j].vertex.yx + inp[j].vertex.zy + inp[j].vertex.zx)).x,
+													random2((inp[j].vertex.xy - inp[j].vertex.yz - inp[j].vertex.xz - inp[j].vertex.yx - inp[j].vertex.zy - inp[j].vertex.zx)).x,
+													random2(float2(inp[j].vertex.xy + inp[j].vertex.yz + inp[j].vertex.xz  )).y  );
 							float i = 6.6338284 * length(origin);
 							origin = origin.xzy;
-							origin.xz = mod(abs(origin.xz),range/2);
-							origin.y *= hight ;
+							origin.xz = (origin.xz) * 2 * range;
+							origin.y = (origin.y - 0.5) *2 +hight ;
 							float4 position = float4(0,0,0,0);
 							float3 add = float3(0,0,0);
 							float Oseed = origin.x + origin.z;
@@ -319,9 +328,15 @@ Shader "Unlit/hirahira_momizi"
 							float seed = length(origin) * (i + j);
 							float fallenSpeed = (_Time.y*fallen) + fBm(float2(seed,seed2.y),4)* 5;
 
-							add.y = (hight - mod((fallenSpeed ) , hight) ) - offset;
+							if (_Inverse > 0) {
+								add.y = (mod((fallenSpeed - offset), hight));
+							}
+							else {
+								add.y = (hight - mod((fallenSpeed - offset), hight));
+							}
 
-							add.xz += sin(sin(_Time.y * length(seed2))*(2*UNITY_PI)/7000) * shake;
+							add.xz += float2(sin(_Time.y/ _ShakeFrequency + _RateOfFallingApart * random2(seed2).x) * shake
+								           , sin(_Time.y/ _ShakeFrequency + _RateOfFallingApart * random2(seed2).y) * shake);
 							//add.xz = rot(add.xz,_Time.x);
 
 							//float coef = sign(step(normalize(length(origin)),0.5)-0.5);
