@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/SimpleTessellation"
 {
 	Properties{
@@ -10,15 +8,15 @@ Shader "Unlit/SimpleTessellation"
 			Pass{
 				CGPROGRAM
 
-   #pragma vertex VS
-   #pragma fragment FS
-   #pragma hull HS
-   #pragma domain DS
-#pragma geometry geom
+				#pragma vertex VS
+				#pragma fragment FS
+				#pragma hull HS
+				#pragma domain DS
+				#pragma geometry geom
 
-#pragma target 5.0
-   #define INPUT_PATCH_SIZE 3
-   #define OUTPUT_PATCH_SIZE 3
+				#pragma target 5.0
+				#define INPUT_PATCH_SIZE 3
+				#define OUTPUT_PATCH_SIZE 3
 
 				uniform vector _TessFactor;
 
