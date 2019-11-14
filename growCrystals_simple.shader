@@ -114,8 +114,8 @@ Shader "geometry/growCrystals_simple"
 				float3 pv5 = normalize(pp5-pp0);
 				float3 pv6 = normalize(pp6-pp0);
 				
-				float3 size1 = _CrystalSize1 * float3(1,1,1);
-				float3 size2 = _CrystalSize2 * float3(1,1,1);
+				float size1 = _CrystalSize1;
+				float size2 = _CrystalSize2;
 				
 				//中心から見て頂点方向に伸ばす
 				pp1 += pv1 * size1;
