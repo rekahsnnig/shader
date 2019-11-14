@@ -94,22 +94,9 @@ Shader "geometry/growCrystals_simple"
 				float3 p2 = ip[2].vertex.xyz;
 
 				//六角柱の各頂点の位置を決める係数群
-				//まとめた方が分かりやすそうだったのでまとめた
 				float3 needle = float3(1./3.,1./3.,1./3.);
 				float3 tri =  float3(2./4.,1./4.,1./4.);
 				float3 itri = float3(2./5.,2./5.,1./5.);
-
-				
-				float3 seed = float3(o.uv,3421.5);
-
-				float3 dir = getNormal(p0,p1,p2);
-				
-				//
-				float3 size1 = _CrystalSize1;
-				float3 size2 = _CrystalSize2;
-				
-				float len =_CrystalLength;
-
 
 				float3 pp0 = (p0*needle.x  + p1*needle.y + p2*needle.z );
 				float3 pp1 = (p0*tri.x   + p1*tri.y  + p2*tri.z);
@@ -126,7 +113,10 @@ Shader "geometry/growCrystals_simple"
 				float3 pv4 = normalize(pp4-pp0);
 				float3 pv5 = normalize(pp5-pp0);
 				float3 pv6 = normalize(pp6-pp0);
-
+				
+				float3 size1 = _CrystalSize1 * float3(1,1,1);
+				float3 size2 = _CrystalSize2 * float3(1,1,1);
+				
 				//中心から見て頂点方向に伸ばす
 				pp1 += pv1 * size1;
 				pp2 += pv2 * size1;
@@ -135,6 +125,8 @@ Shader "geometry/growCrystals_simple"
 				pp5 += pv5 * size2;
 				pp6 += pv6 * size2;
 
+				float3 dir = getNormal(p0,p1,p2);
+				float len =_CrystalLength;
 				
 				float3 pp0d = pp0 + dir * _Sharpness;
 				//法線の方向にlenの長さ分伸ばす
