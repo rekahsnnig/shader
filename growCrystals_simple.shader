@@ -494,7 +494,7 @@ Shader "geometry/growCrystals_simple"
 			fixed4 frag (g2f i) : SV_Target
 			{
 				float4 col = float4(_Color,1);
-				float3 light = _WorldSpaceLightPos0;
+				float3 light = float3(0,0.5,0.5);
 
 				col.rgb = dot(i.normal,light) * col.rgb;
 				return col;
