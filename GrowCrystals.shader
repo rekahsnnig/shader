@@ -18,7 +18,7 @@ Shader "Crystal/GrowCrystals"
 		[HDR]_Color("Color",Color) = (1,1,1)
 		_TessFactor("Tess Factor",Vector) = (2,2,2,2)
 		_AlphaMin("Alpha Min",range(0,1)) = 0.2 
-        _White("White",Range(0,1000)) = 0.1
+        _White("White",Range(0,1)) = 0.1
 	}
 	SubShader
 	{
@@ -165,10 +165,9 @@ Shader "Crystal/GrowCrystals"
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 normal :NORMAL;
-                float nCrystal: TEXCOORD1;
-                float4 vertexW : TEXCOORD2;
-                float h : TEXCOORD3;
-                float maxh : TEXCOORD4;
+                float4 vertexW : TEXCOORD1;
+                float h : TEXCOORD2;
+                float maxh : TEXCOORD3;
             };
 
 			
@@ -358,20 +357,20 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp1,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp2,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp1d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -382,25 +381,25 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp2,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp1d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp2d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
-                o.nCrystal = 0;
+                
                 OutputStream.RestartStrip();
 
                 //2
@@ -408,21 +407,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp2,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp3,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp2d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -433,21 +432,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp3,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp3d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp2d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -459,21 +458,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp3,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp4,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp3d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -484,21 +483,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp4,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp4d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp3d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -510,21 +509,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp4,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp5,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp4d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -535,21 +534,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp5,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp5d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp4d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -561,21 +560,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp5,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp6,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp5d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -586,21 +585,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp6,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp6d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp5d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -612,21 +611,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp6,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp1,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp6d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -637,21 +636,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp1,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = 0;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp1d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp6d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -664,21 +663,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp1d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp2d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -690,21 +689,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp2d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp3d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -716,21 +715,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp3d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp4d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -740,21 +739,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp4d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp5d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -764,21 +763,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp5d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp6d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -788,21 +787,21 @@ Shader "Crystal/GrowCrystals"
                 v4o = float4(pp6d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp1d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
                 v4o = float4(pp0d,1);
                 o.normal = normal;
                 o.vertex = UnityObjectToClipPos(v4o);
-                o.nCrystal = 0;
+                
                 o.h = len + _Sharpness;
                 o.vertexW = v4o;
                 OutputStream.Append(o);
@@ -812,18 +811,15 @@ Shader "Crystal/GrowCrystals"
             {
                 clip(_Crystal-1);
                 fixed4 mask = tex2D(_MaskTex,i.uv);
-                float cl = (mask.g  < 0.5) + (i.nCrystal > 0.5);
+                float cl = (mask.g  < 0.5);
                 clip(cl * -1);
                 
                 float mh = (i.maxh+_Sharpness);
-                float ihr = (i.h)/(i.maxh+_Sharpness);
+                float ihr = (i.h)/mh;
                 
-                float3 ccolor = lerp(float3(1,1,1) , _Color , (i.h+_White)/(i.maxh+_Sharpness));
-                fixed3 col = ccolor;
+                fixed3 col = lerp(float3(1,1,1) , _Color , saturate( (i.h+_White)/mh) );
                 float3 specularCol = 1;
-
-                float3 CrystalCol = reflection(i,col,specularCol,5);
-                col.rgb = CrystalCol;
+                col.rgb = reflection(i,col,specularCol,5);
 
                 float alpha = 1-ihr;
                 alpha = clamp( alpha,_AlphaMin,1);
