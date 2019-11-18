@@ -830,4 +830,3 @@ Shader "Crystal/GrowCrystals"
 		
 	}
 }
-a
