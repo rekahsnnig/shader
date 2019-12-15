@@ -1,4 +1,15 @@
-//https://www.shadertoy.com/view/XsX3zB
+ float3 random3(float3 c) {
+                float j = 4096.0*sin(dot(c,float3(17.0, 59.4, 15.0)));
+                float3 r;
+                r.z = frac(512.0*j);
+                j *= .125;
+                r.x = frac(512.0*j);
+                j *= .125;
+                r.y = frac(512.0*j);
+                return r-0.5;
+            }
+
+            //https://www.shadertoy.com/view/XsX3zB
             /* skew constants for 3d simplex functions */
             const float F3 =  0.3333333;
             const float G3 =  0.1666667;
@@ -114,16 +125,16 @@
                 return normalize(float3(x,y,z)/2.*e.x);
             }
 
-            float3 curlNoiseCell(float3 p)
+            float3 curlNoiseCell(float3 p,float s)
             {
                 float3 e = float3(0.0001,0.,0.);
 
-                float3 x1 = celler3D(p - e).xyz;
-                float3 x2 = celler3D(p + e).xyz;
-                float3 y1 = celler3D(p - e.yxz).xyz;
-                float3 y2 = celler3D(p + e.yxz).xyz;
-                float3 z1 = celler3D(p - e.zyx).xyz;
-                float3 z2 = celler3D(p - e.zyx).xyz;
+                float3 x1 = celler3D(p - e,s).xyz;
+                float3 x2 = celler3D(p + e,s).xyz;
+                float3 y1 = celler3D(p - e.yxz,s).xyz;
+                float3 y2 = celler3D(p + e.yxz,s).xyz;
+                float3 z1 = celler3D(p - e.zyx,s).xyz;
+                float3 z2 = celler3D(p - e.zyx,s).xyz;
 
                 float x = y2.z - y1.z - z2.y + z1.y;
                 float y = z2.x - z1.x - x2.z + x1.z;
