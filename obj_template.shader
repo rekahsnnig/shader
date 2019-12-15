@@ -36,7 +36,7 @@ Shader "raymarching/obj_template"
 			float2x2 rot(float a)
 			{
 				float s = sin(a), c = cos(a);
-				return float2x2(a,c,-c,a);
+				return float2x2(c,s,-s,c);
 			}
 
 			float dist(float3 p)
