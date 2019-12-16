@@ -1,4 +1,4 @@
-Shader "Unlit/"
+Shader "geometry/geomtry"
 {
 	Properties
 	{
@@ -55,9 +55,7 @@ Shader "Unlit/"
 			[maxvertexcount(90) ]
 			 void geom(triangle v2g input[3], inout TriangleStream<g2f> OutputStream)
 			{
-
 				g2f v = (g2f)0;
-
 				[unroll]
 				for(int j = 0;j < 3;j++){
 					v.vertex = UnityObjectToClipPos(input[j].vertex);
@@ -66,7 +64,7 @@ Shader "Unlit/"
 					OutputStream.Append(v);
 				}
 				OutputStream.RestartStrip();
-		    }
+		    	}
 			
 			fixed4 frag (g2f i) : SV_Target
 			{
