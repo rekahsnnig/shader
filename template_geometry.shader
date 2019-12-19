@@ -52,7 +52,7 @@ Shader "geometry/geomtry"
 				return o;
 			}
 
-			[maxvertexcount(90) ]
+			[maxvertexcount(3) ]
 			 void geom(triangle v2g input[3], inout TriangleStream<g2f> OutputStream)
 			{
 				g2f v = (g2f)0;
