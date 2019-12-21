@@ -86,7 +86,7 @@ Shader "raymarching/obj_Yukidaruma"
 				float s = (cb.x<0.0 && ca.y<0.0) ? -1.0 : 1.0;
 				return s*sqrt( min(dot(ca,ca),dot(cb,cb)) );
 			}
-
+			
 			float2 Head(float3 p)
 			{
 				float3 headp = p;
@@ -265,12 +265,13 @@ Shader "raymarching/obj_Yukidaruma"
 					    eq(id,6.) * float3(0.5,0.3,0.1);
 
 					float diff = saturate(dot(light,normal));
+					//lighting
 					float bou =  0.5 + 0.5 * saturate(dot(normal , float3(0.,-1.,0.)));
 					float sky =  0.5 + 0.5 * saturate(dot(normal , float3(0.,1.,0.)));
 					color = color * diff;
 					color += color * bou;
 					color += color * sky;
-
+					
 					color = pow(color,0.4545);
 					return float4(color,1);
 				}
