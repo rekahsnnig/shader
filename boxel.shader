@@ -53,7 +53,7 @@ Shader "geometry/geomtry_boxel"
 				o.normal = v.normal;
 				return o;
 			}
-            static const float3 boxes[24] = {
+            		static const float3 boxes[24] = {
 					float3(1.0, -1.0, 1.0),
 					float3(1.0, 1.0, 1.0),
 					float3(-1.0, -1.0, 1.0),
@@ -78,7 +78,7 @@ Shader "geometry/geomtry_boxel"
 					float3(-1.0, 1.0, 1.0),
 					float3(-1.0, -1.0, -1.0),
 					float3(-1.0, 1.0, -1.0)
-            	};
+            		};
 
 			[maxvertexcount(72) ]
 			 void geom(triangle v2g input[3], inout TriangleStream<g2f> OutputStream)
@@ -87,21 +87,22 @@ Shader "geometry/geomtry_boxel"
 				
 				[unroll]
 				for(int j = 0;j < 3;j++){
-                    [unroll]
-                    for(int k = 0; k < 6; k++)
-                    {
-                        [unroll]
-                        for(int l = 0; l < 4 ; l++)
-                        {
-                            v.vertex = UnityObjectToClipPos(input[j].vertex + float4(boxes[k*4+l]*_Size,0));
-                            v.uv = input[j].uv;
-                            v.normal = input[j].normal;
-                            OutputStream.Append(v);
-                        }
-				        OutputStream.RestartStrip();
-                    }
+				    [unroll]
+				    for(int k = 0; k < 6; k++)
+				    {
+					[unroll]
+					for(int l = 0; l < 4 ; l++)
+					{
+					    //座標を加工
+					    v.vertex = UnityObjectToClipPos(input[j].vertex + float4(boxes[k*4+l]*_Size,0));
+					    v.uv = input[j].uv;
+					    v.normal = input[j].normal;
+					    OutputStream.Append(v);
+					}
+					OutputStream.RestartStrip();
+				    }
 				}
-		    }
+		    	}
 			
 			fixed4 frag (g2f i) : SV_Target
 			{
