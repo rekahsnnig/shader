@@ -109,7 +109,8 @@ Shader "raymarching/obj_Yukidaruma"
 				nosep.y -= 0.1;
 				nosep.x += 0.17;
 
-				//bukkit
+				
+				//bucket
 				bkp.y -= 0.3;
 				bkp.xz += float2(-.01,.01) * sin(bkp.y*120. + _Time.y);
 
@@ -156,7 +157,7 @@ Shader "raymarching/obj_Yukidaruma"
 				return float2(as,0);
 			}
 
-
+			//モデリング部
 			float2 dist(float3 p)
 			{
 				p.y += 0.27;
@@ -218,7 +219,6 @@ Shader "raymarching/obj_Yukidaruma"
 					float3 cu = UNITY_MATRIX_V[1].xyz;
 					float3 cs = UNITY_MATRIX_V[0].xyz;
 
-					//the Ray starting position when camera in object
 					//カメラ方向と法線の内積の正負によってレイの開始位置を変えられます
 					//外から見るだけならここは不要
 					float sep = dot(i.normal, cd);
