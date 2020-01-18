@@ -26,7 +26,7 @@ Shader "Unlit/Seabed"
             {
                 float4 vertex : SV_POSITION;
                 float3 ro :TEXCOORD0;
-                float3 hitpos :TEXCOORD1;
+                float3 surf :TEXCOORD1;
             };
 
             sampler2D _MainTex;
@@ -37,7 +37,7 @@ Shader "Unlit/Seabed"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.ro = mul(unity_WorldToObject,float4(_WorldSpaceCameraPos,1));
-                o.hitpos = v.vertex;
+                o.surf = v.vertex;
                 return o;
             }
 
@@ -71,11 +71,11 @@ Shader "Unlit/Seabed"
             fixed4 frag (v2f i) : SV_Target
             {
                 float3 ro = i.ro;
-                float3 rd = normalize(i.hitpos - ro);
+                float3 rd = normalize(i.surf - ro);
 
                 float3 color = 0;
                 float d = marching(ro,rd);
-                if(d > -0.1)
+                if(d > 0)
                 {
                     float3 light = normalize(float3(0.2,0.4,0.8));
                     color = 1;
