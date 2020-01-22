@@ -1,4 +1,4 @@
-Shader "Unlit/Seabed"
+Shader "Unlit/OBJSPC_raymarching"
 {
     Properties
     {
