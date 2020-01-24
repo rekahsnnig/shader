@@ -256,6 +256,40 @@
                 }
                 return float4(mp,dist);
             }
+            
+            float2 random2(float2 c) {
+                float j = 4096.0*sin(dot(c,float3(17.0, 59.4, 15.0)));
+                float2 r;
+                r.x = frac(512.0*j);
+                j *= .125;
+                r.y = frac(512.0*j);
+                return r-0.5;
+            }
+            
+            float3 celler2D(float2 i,float2 sepc)
+            {
+                float2 sep = i * sepc;
+                float2 fp = floor(sep);
+                float2 sp = frac(sep);
+                float dist = 5.;
+                float2 mp = 0.;
+
+                [unroll]
+                for (int y = -1; y <= 1; y++)
+                {
+                    [unroll]
+                    for (int x = -1; x <= 1; x++)
+                    {
+                        float2 neighbor = float2(x, y);
+                        float2 pos = float2(random2(fp+neighbor));
+                        pos = sin( (pos*6. +_Time.y/2.) )* 0.5 + 0.5;
+                        float divs = length(neighbor + pos - sp);
+                        mp = (dist >divs)?pos:mp;
+                        dist = (dist > divs)?divs:dist;
+                    }
+                }
+                return float3(mp,dist);
+            }
 
             vec3 curlNoiseSimp(vec3 p)
             {
