@@ -59,7 +59,7 @@ Shader "Unlit/OBJSPC_raymarching"
                 {
                     float3 rp = ro + rd * depth;
                     float d = map(rp);
-                    if(d < 0.001)
+                    if(abs(d) < 0.001)
                     {
                         return depth;
                     }
