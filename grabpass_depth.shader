@@ -47,12 +47,6 @@ Shader "Unlit/dddd"
                 return o;
             }
 
-			float2x2 rot(float a)
-			{
-				return float2x2(cos(a),sin(a),-sin(a),cos(a));
-			}
-
-
             float map(float3 p)
             {
 				p = mul(unity_WorldToObject,float4(p,1));
