@@ -61,7 +61,7 @@ Shader "Unlit/dddd"
                 return normalize(map(p).x - float3(map(p - e.xyy).x,map( p - e.yxy).x,map( p - e.yyx).x));
             }
 
-            float2 marching(float3 ro,float3 rd)
+            float marching(float3 ro,float3 rd)
             {
                 float depth = 0.0;
                 for(int i = 0 ; i< 99; i++)
@@ -70,7 +70,7 @@ Shader "Unlit/dddd"
                     float2 d = map(rp);
 					
 					//if(MAXDEPTH < d.x + depth){break;}
-                    if(abs(d.x) < 0.001)
+                    if(abs(d.x) < 0.01)
                     {
                         return depth;
                     }
