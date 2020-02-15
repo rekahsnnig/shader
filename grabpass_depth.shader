@@ -58,7 +58,7 @@ Shader "Unlit/dddd"
             float3 calcNormal(float3 p)
             {
                 float2 e = float2(0.001,0.);
-                return normalize(map(p).x - float3(map(p - e.xyy).x,map( p - e.yxy).x,map( p - e.yyx).x));
+                return normalize(map(p) - float3(map(p - e.xyy),map( p - e.yxy),map( p - e.yyx)));
             }
 
             float marching(float3 ro,float3 rd)
@@ -67,10 +67,10 @@ Shader "Unlit/dddd"
                 for(int i = 0 ; i< 99; i++)
                 {
                     float3 rp = ro + rd * depth;
-                    float2 d = map(rp);
+                    float d = map(rp);
 					
 					//if(MAXDEPTH < d.x + depth){break;}
-                    if(abs(d.x) < 0.01)
+                    if(abs(d) < 0.01)
                     {
                         return depth;
                     }
@@ -88,8 +88,8 @@ Shader "Unlit/dddd"
 				depth = LinearEyeDepth(depth);
 				float3 gt = tex2D(_GrabTex,uv);
                 float3 color = 0;
-                float2 d = marching(ro,rd);
-                if(d.x > 0)
+                float d = marching(ro,rd);
+                if(d > 0)
                 {
                     float3 light = normalize(float3(0.2,0.4,0.8));
                     color = 1;
@@ -98,8 +98,8 @@ Shader "Unlit/dddd"
                     color = color * diff;
                     color = normal;
                 }
-				d.x = (d.x < 0)?depth+1:d.x;
-				color = lerp(gt,color,(d.x < depth) );
+				d = (d < 0)?depth+1:d;
+				color = lerp(gt,color,(d < depth) );
                 return float4(color,1) ;
             }
             ENDCG
