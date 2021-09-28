@@ -126,3 +126,39 @@ Shader "Unlit/celler3D 1"
         }
     }
 }
+/*
+vec2 random22(vec2 st)
+{
+    st = vec2(dot(st, vec2(127.1, 311.7)),
+                dot(st, vec2(269.5, 183.3)));
+    return -1.0 + 2.0 * fract(sin(st) * 43758.5453123);
+}
+
+vec2 celler2D_returnUV(vec2 i,vec2 sepc)
+{
+    vec2 sep = i * sepc;
+    vec2 f = floor(sep);
+    float dist = 5.;
+	vec2 ouv = vec2(0.);
+	float t = time;
+
+	for (int y = -3; y <= 3; y++)
+	{
+		for (int x = -3; x <= 3; x++)
+		{
+			vec2 neighbor = vec2(x, y );
+			srand(f + neighbor);
+			vec2 o;
+			o.x = rand();
+			o.y = rand();
+			o *= rot(t * (rand() - 0.1));
+			float divs = length(f + neighbor + o - sep);
+			if(divs < dist){
+				dist=divs;
+				ouv  = o + neighbor + f;
+			}
+		}
+    }
+    return vec2(ouv);
+}
+*/
