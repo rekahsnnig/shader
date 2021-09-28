@@ -127,6 +127,19 @@ Shader "Unlit/celler3D 1"
     }
 }
 /*
+float s;
+void srand(vec2 p){
+	s=sin(dot(p,vec2(423.62431,321.54323)));
+}
+float rand(){
+	s=fract(s*32322.65432+0.12333);
+	return abs(fract(s));
+}
+float grad(float t){
+	return 6.0*pow(t,5.0)-15.0*pow(t,4.0)+10.0*pow(t,3.0);
+}
+mat2 rot(float a){return mat2(cos(a),sin(a),-sin(a),cos(a));}
+
 vec2 random22(vec2 st)
 {
     st = vec2(dot(st, vec2(127.1, 311.7)),
