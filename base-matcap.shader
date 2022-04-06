@@ -74,7 +74,7 @@
                 float3 normal = UnityObjectToWorldNormal(i.normal);
                 normal = mul((float3x3)UNITY_MATRIX_V, normal);
 
-                float3 normalMap = UnpackNormal(tex2D(_NormalMap, i.uv));
+                float3 normalMap = UnpackNormal(tex2D(_NormalMap, i.uv * _NormalMapTiling.xy));
 
                 //toWorldNormal
                 normalMap = (i.tangent * normalMap.x) 
