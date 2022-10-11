@@ -5,7 +5,6 @@ Shader "Unlit/FogwithDepth"
         [HDR]_FogColor("Fog Color",color)=(1,1,1,1)
         _FogStart("Fog Start",float)=0
         _FogEnd("Fog End",float) = 10
-        _Multiple("Multiply",float) = 1.
     }
     SubShader
     {
